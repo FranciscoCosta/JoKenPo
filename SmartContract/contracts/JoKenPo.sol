@@ -82,7 +82,7 @@ contract JoKenPo {
 
 
     function play(Options newChoice) external payable {
-        require(msg.sender != owner, "Owner cannot play");
+        // require(msg.sender == owner, "Owner cannot play");
         require(newChoice != Options.NONE, "Invalid choice");
         require(player1 != msg.sender, "Wait for the other player to play");
         require(msg.value >= bid, "Invalid bid");
@@ -104,7 +104,7 @@ contract JoKenPo {
         } else if (choice1 == Options.Scissors && newChoice == Options.Paper) {
             finishGame("Player 1 wins", player1);
         } else {
-            result = "It's a tie, play again";
+            result = "It is a tie, play again";
             player1 = address(0);
             choice1 = Options.NONE;
         }
@@ -114,7 +114,6 @@ contract JoKenPo {
         if(players.length < 2){
             return players;
         }
-
         Player[] memory arr = new Player[](players.length);
         for(uint256 i = 0; i < players.length; i++) arr[i] = players[i];
 
