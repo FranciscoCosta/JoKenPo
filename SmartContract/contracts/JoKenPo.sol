@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "./IJoKenPo.sol";
 
 
-contract JoKenPo {
+contract JoKenPo is IJoKenPo {
    
-   enum Options {NONE,Rock, Paper, Scissors} // 0, 1, 2
-
     Options private choice1 = Options.NONE;
     address private player1;
     string private result = "";
@@ -14,11 +13,6 @@ contract JoKenPo {
     uint8 private comission = 10;
 
     address payable private immutable owner;
-
-    struct Player {
-        address wallet;
-        uint32 wins;
-    }
 
     Player[] public players;
 
@@ -75,7 +69,7 @@ contract JoKenPo {
         choice1 = Options.NONE;
     }
 
-    function getBalance() public view returns (uint) {
+    function getBalance() external view returns (uint) {
         require(msg.sender == owner, "Only the owner can get the balance");
         return address(this).balance;
     }
@@ -91,17 +85,17 @@ contract JoKenPo {
             player1 = msg.sender;
             choice1 = newChoice;
             result = "Waiting for the other player";
-        } else if (choice1 == Options.Rock && newChoice == Options.Paper) {
+        } else if (choice1 == Options.ROCK && newChoice == Options.PAPER) {
             finishGame("Player 2 wins", msg.sender);
-        } else if (choice1 == Options.Rock && newChoice == Options.Scissors) {
+        } else if (choice1 == Options.ROCK && newChoice == Options.SCISSORS) {
             finishGame("Player 1 wins", player1);
-        } else if (choice1 == Options.Paper && newChoice == Options.Rock) {
+        } else if (choice1 == Options.PAPER && newChoice == Options.ROCK) {
             finishGame("Player 1 wins", player1);
-        } else if (choice1 == Options.Paper && newChoice == Options.Scissors) {
+        } else if (choice1 == Options.PAPER && newChoice == Options.SCISSORS) {
             finishGame("Player 2 wins", msg.sender);
-        } else if (choice1 == Options.Scissors && newChoice == Options.Rock) {
+        } else if (choice1 == Options.SCISSORS && newChoice == Options.ROCK) {
             finishGame("Player 2 wins", msg.sender);
-        } else if (choice1 == Options.Scissors && newChoice == Options.Paper) {
+        } else if (choice1 == Options.SCISSORS && newChoice == Options.PAPER) {
             finishGame("Player 1 wins", player1);
         } else {
             result = "It is a tie, play again";
