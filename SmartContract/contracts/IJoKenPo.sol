@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
+import "./JKPLibrary.sol";
+
 interface IJoKenPo {
    
-   enum Options {NONE,ROCK, PAPER, SCISSORS} // 0, 1, 2
-
-    struct Player {
-        address wallet;
-        uint32 wins;
-    }
 
     function getBid() external view returns (uint256);
     
@@ -23,8 +19,8 @@ interface IJoKenPo {
     function getBalance() external view returns (uint256);
 
 
-    function play(Options newChoice) external payable;
+    function play(JKPLibrary.Options newChoice) external payable;
 
-    function getLeaderboard() external view returns (Player[] memory);
+    function getLeaderboard() external view returns (JKPLibrary.Player[] memory);
 }
 
