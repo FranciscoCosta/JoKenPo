@@ -17,7 +17,7 @@ contract JoKenPo is IJoKenPo {
 
 
     constructor() {
-        owner = payable(msg.sender);
+        owner = payable(tx.origin);
     }
 
     function getBid() external view returns (uint256) {
@@ -33,14 +33,14 @@ contract JoKenPo is IJoKenPo {
     }
 
     function setComission(uint8 newComission) external {
-        require(msg.sender == owner, "Only the owner can set the comission");
+        require(tx.origin == owner, "Only the owner can set the comission");
         require(player1 == address(0), "Cannot change comission while a game is in progress");
         require(newComission >= 0 && newComission <= 100, "Comission must be between 0 and 100");
         comission = newComission;
     }
 
     function setBid(uint256 newBid) external {
-        require(msg.sender == owner, "Only the owner can set the bid");
+        require(tx.origin == owner, "Only the owner can set the bid");
         require(newBid > 0, "Bid must be greater than 0");
         require(player1 == address(0), "Cannot change bid while a game is in progress");
         bid = newBid;
@@ -70,31 +70,31 @@ contract JoKenPo is IJoKenPo {
     }
 
     function getBalance() external view returns (uint) {
-        require(msg.sender == owner, "Only the owner can get the balance");
+        require(tx.origin == owner, "Only the owner can get the balance");
         return address(this).balance;
     }
 
 
     function play(JKPLibrary.Options newChoice) external payable {
-        // require(msg.sender == owner, "Owner cannot play");
+        // require(tx.origin == owner, "Owner cannot play");
         require(newChoice != JKPLibrary.Options.NONE, "Invalid choice");
-        require(player1 != msg.sender, "Wait for the other player to play");
+        require(player1 != tx.origin, "Wait for the other player to play");
         require(msg.value >= bid, "Invalid bid");
 
         if(choice1 == JKPLibrary.Options.NONE) {
-            player1 = msg.sender;
+            player1 = tx.origin;
             choice1 = newChoice;
             result = "Waiting for the other player";
         } else if (choice1 == JKPLibrary.Options.ROCK && newChoice == JKPLibrary.Options.PAPER) {
-            finishGame("Player 2 wins", msg.sender);
+            finishGame("Player 2 wins", tx.origin);
         } else if (choice1 == JKPLibrary.Options.ROCK && newChoice == JKPLibrary.Options.SCISSORS) {
             finishGame("Player 1 wins", player1);
         } else if (choice1 == JKPLibrary.Options.PAPER && newChoice == JKPLibrary.Options.ROCK) {
             finishGame("Player 1 wins", player1);
         } else if (choice1 == JKPLibrary.Options.PAPER && newChoice == JKPLibrary.Options.SCISSORS) {
-            finishGame("Player 2 wins", msg.sender);
+            finishGame("Player 2 wins", tx.origin);
         } else if (choice1 == JKPLibrary.Options.SCISSORS && newChoice == JKPLibrary.Options.ROCK) {
-            finishGame("Player 2 wins", msg.sender);
+            finishGame("Player 2 wins", tx.origin);
         } else if (choice1 == JKPLibrary.Options.SCISSORS && newChoice == JKPLibrary.Options.PAPER) {
             finishGame("Player 1 wins", player1);
         } else {

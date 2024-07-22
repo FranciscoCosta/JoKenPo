@@ -5,7 +5,6 @@ import "./JKPLibrary.sol";
 
 interface IJoKenPo {
    
-
     function getBid() external view returns (uint256);
     
     function getComission() external view returns (uint8);
@@ -17,7 +16,6 @@ interface IJoKenPo {
     function setBid(uint256 newBid) external;
 
     function getBalance() external view returns (uint256);
-
 
     function play(JKPLibrary.Options newChoice) external payable;
 
