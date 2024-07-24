@@ -5,7 +5,7 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.24",
+  solidity: "0.8.20",
   defaultNetwork: "local",
   networks: {
     local: {
@@ -15,16 +15,16 @@ const config: HardhatUserConfig = {
         mnemonic: "test test test test test test test test test test test junk",
       },
     },
-    // bsctest: {
-    //   url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
-    //   chainId: 97,
-    //   accounts: {
-    //     mnemonic: process.env.SECRET,
-    //   },
-    // },
+    bsctest: {
+      url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+      chainId: 97,
+      accounts: {
+        mnemonic: process.env.SECRET || "",
+      },
+    },
   },
   etherscan: {
-    apiKey: process.env.API_KEY_BSC,
+    apiKey: process.env.API_KEY_BSC || "",
   },
 };
 
