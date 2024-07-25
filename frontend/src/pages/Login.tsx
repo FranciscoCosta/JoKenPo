@@ -1,6 +1,6 @@
+import React, { useState} from "react";
+
 import { Button } from "@/components/ui/button.tsx";
-
-
 import metamask from "@/assets/metamask-icon.svg";
 import {
   Bitcoin,
@@ -10,8 +10,18 @@ import {
   UsersIcon,
 } from "lucide-react";
 import IconsSection from "@/Components/IconsSection";
+import {authenticate} from "@/lib/Web3Service";
 
 export default function Login() {
+
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    const response = await authenticate();
+    console.log(response);
+    setLoading(false);
+  }
   return (
     <>
       {/* Hero */}
@@ -25,9 +35,14 @@ export default function Login() {
                 Start playing now and win big prizes.
             </p>
             <div className="mt-7 sm:mt-12 mx-auto ">
-                <Button variant={"default"} className="w-max border-2 py-6 text-lg px-8 ">
+                <Button
+                disabled={loading}
+                onClick={() => {
+                  handleLogin();
+                }}
+                variant={"default"} className="w-max border-2 py-6 text-lg px-8 ">
                     <img src={metamask} className="w-6 h-auto mr-2" alt="Metamask" />
-                    Metamask
+                    {loading ? "Connecting..." : "Connect with Metamask"}
                 </Button>
             </div>
             <div className="mt-10 sm:mt-20 flex flex-wrap gap-2 justify-center">
