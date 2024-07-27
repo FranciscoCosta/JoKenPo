@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 
 import { Button } from "@/components/ui/button.tsx";
 import metamask from "@/assets/metamask-icon.svg";
@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import IconsSection from "@/Components/IconsSection";
 import {authenticate} from "@/lib/Web3Service";
+import { toast } from "react-toastify";
 
 export default function Login() {
 
@@ -18,9 +19,34 @@ export default function Login() {
 
   const handleLogin = async () => {
     setLoading(true);
-    const response = await authenticate();
-    console.log(response);
-    setLoading(false);
+    try{
+      await authenticate();
+      const isAdmin = localStorage.getItem("isAdmin") === "true";
+      redirectAfterLogin(isAdmin);
+    }catch(e){
+      console.error(e);
+    }finally{
+      setLoading(false);
+    }
+  }
+
+
+  useEffect(() => {
+    const account = localStorage.getItem("account");
+    if(account){
+      const isAdmin = localStorage.getItem("isAdmin") === "true";
+      redirectAfterLogin(isAdmin);
+    }else{
+      toast.error("Please connect with Metamask to continue");
+    }
+  }, [])
+  
+  function redirectAfterLogin(isAdmin : boolean){
+    if(isAdmin){
+      window.location.href = "/admin";
+    }else{
+      window.location.href = "/dashboard";
+    }
   }
   return (
     <>
