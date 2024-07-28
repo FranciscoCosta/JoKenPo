@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import IconsSection from "@/Components/IconsSection";
 import {authenticate} from "@/lib/Web3Service";
-import { toast } from "react-toastify";
 
 export default function Login() {
 
@@ -20,9 +19,10 @@ export default function Login() {
   const handleLogin = async () => {
     setLoading(true);
     try{
-      await authenticate();
+      const response = await authenticate();
+      console.log(response);
       const isAdmin = localStorage.getItem("isAdmin") === "true";
-      redirectAfterLogin(isAdmin);
+       redirectAfterLogin(isAdmin);
     }catch(e){
       console.error(e);
     }finally{
@@ -33,11 +33,12 @@ export default function Login() {
 
   useEffect(() => {
     const account = localStorage.getItem("account");
+    console.log(account);
     if(account){
       const isAdmin = localStorage.getItem("isAdmin") === "true";
       redirectAfterLogin(isAdmin);
     }else{
-      toast.error("Please connect with Metamask to continue");
+      return;
     }
   }, [])
   
@@ -45,7 +46,7 @@ export default function Login() {
     if(isAdmin){
       window.location.href = "/admin";
     }else{
-      window.location.href = "/dashboard";
+      window.location.href = "/app";
     }
   }
   return (

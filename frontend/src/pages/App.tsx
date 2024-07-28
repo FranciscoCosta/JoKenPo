@@ -1,8 +1,11 @@
-import React from 'react'
+import Header from '@/Components/Header';
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <Header />
+      <h1 className='text-3xl text-white text-center py-10'>App Page</h1>
+    </div>
   )
 }
 
